@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MaterialExport;
 use App\Http\Requests\StoreMaterialsRequest;
 use App\Http\Requests\UpdateMaterialsRequest;
 use App\Models\Categories;
 use App\Models\Materials;
 use App\Models\Subcategories;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\PDF;
 
 class MaterialsController extends Controller
 {
@@ -115,5 +118,19 @@ class MaterialsController extends Controller
         $query = $request->get('query');
         $subkat = Subcategories::where('nm_subcat', 'LIKE', "%{$query}%")->get();
         return response()->json($subkat);
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new MaterialExport, 'Data Material.xlsx');
+    }
+
+    public function exportPDF()
+    {
+        $material = Materials::with('category','subcategories')->get();
+        $pdf = PDF::loadView($this->view.'pdf', compact('material'))->setPaper('a4', 'landscape');
+        // return $pdf->download('Data Material.pdf');
+        // return view($this->view.'pdf',compact('material'));
+          return $pdf->stream();
     }
 }

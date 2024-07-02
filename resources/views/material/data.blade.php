@@ -10,15 +10,18 @@
         });
     </script>
     <div class="card-shadow">
-        <a href="{{ url($routes->add) }}" class="btn h-20 mb-3" style="background-color:#4e73df; margin-left:25px; color:#fff">
+        <a href="{{ url($routes->add) }}" class="btn h-20 mb-3 btn-sm"
+            style="background-color:#4e73df; margin-left:25px; color:#fff">
             <i class="fas fa-plus"> Tambah Data</i><br>
         </a>
-
-        {{-- @if (Auth::user()->role == 'SuperAdmin')
-            <a href="{{ route('export-karyawan') }}" class="btn btn-success h-20 mb-3" style="margin-left:25px">
-                <i class="fas fa-file-excel"> Export Excel</i><br>
-            </a>
-        @endif --}}
+        <a href="{{ url('material/export-excel') }}" class="btn h-20 mb-3 btn-sm"
+            style="background-color:#4e73df; margin-left:25px; color:#fff">
+            <i class="fas fa-file-excel"> Export Excel</i><br>
+        </a>
+        <a href="{{ url('material/export-pdf') }}" class="btn h-20 mb-3 btn-sm"
+            style="background-color:#4e73df; margin-left:25px; color:#fff">
+            <i class="fas fa-file-pdf"> Export PDF</i><br>
+        </a>
     </div>
     <div class="card shadow mb-3">
         <div class="card-header" style="background-color:#4e73df;color:#fff">

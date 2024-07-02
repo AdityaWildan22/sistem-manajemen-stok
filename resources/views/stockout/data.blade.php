@@ -10,8 +10,17 @@
         });
     </script>
     <div class="card-shadow">
-        <a href="{{ url($routes->add) }}" class="btn h-20 mb-3" style="background-color:#4e73df; margin-left:25px; color:#fff">
+        <a href="{{ url($routes->add) }}" class="btn h-20 mb-3 btn-sm"
+            style="background-color:#4e73df; margin-left:25px; color:#fff">
             <i class="fas fa-plus"> Tambah Data</i><br>
+        </a>
+        <a href="{{ url('stockout/export-excel') }}" class="btn h-20 mb-3 btn-sm"
+            style="background-color:#4e73df; margin-left:25px; color:#fff">
+            <i class="fas fa-file-excel"> Export Excel</i><br>
+        </a>
+        <a href="{{ url('stockout/export-pdf') }}" class="btn h-20 mb-3 btn-sm"
+            style="background-color:#4e73df; margin-left:25px; color:#fff">
+            <i class="fas fa-file-pdf"> Export PDF</i><br>
         </a>
     </div>
     <div class="card-shadow">

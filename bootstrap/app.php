@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+            'PDF' => Barryvdh\DomPDF\Facade::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

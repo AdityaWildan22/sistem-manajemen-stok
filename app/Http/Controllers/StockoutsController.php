@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StockoutExport;
 use App\Http\Requests\StoreStockoutsRequest;
 use App\Http\Requests\UpdateStockoutsRequest;
 use App\Models\Areas;
@@ -10,6 +11,8 @@ use App\Models\drawings;
 use App\Models\lines;
 use App\Models\Materials;
 use App\Models\Stockouts;
+use Barryvdh\DomPDF\Facade\PDF;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StockoutsController extends Controller
 {
@@ -116,23 +119,16 @@ class StockoutsController extends Controller
      */
     public function update(UpdateStockoutsRequest $request, $id)
 {
-    // Temukan stockout yang akan diupdate
     $stockout = Stockouts::findOrFail($id);
 
-    // Simpan perubahan pada data stockout
     $stockout->no_trans = $request->no_trans;
     $stockout->tgl_keluar = $request->tgl_keluar;
     $stockout->save();
 
-    // Array untuk menyimpan selisih jumlah
     $selisihJumlah = [];
-
-    // Array untuk menyimpan ID detail yang dihapus
     $deletedDetails = [];
 
-    // Proses update detail stockout
     foreach ($request->details as $key => $detail) {
-        // Jika ada 'new' dalam detail, berarti ini detail baru
         if (isset($detail['new'])) {
             $newDetail = DetailStockouts::create([
                 'id_stockout' => $stockout->id,
@@ -143,31 +139,26 @@ class StockoutsController extends Controller
                 'jumlah' => $detail['jumlah'],
             ]);
 
-            // Update stok di tabel material
             $material = Materials::findOrFail($detail['id_barang']);
             if ($material) {
-                $material->stok -= $detail['jumlah']; // Adjust stock for stockout
+                $material->stok -= $detail['jumlah'];
                 $material->save();
             }
 
-            continue; // Lanjutkan ke iterasi berikutnya
+            continue;
         }
 
-        // Jika detail dihapus, tambahkan ke array deletedDetails dan lanjutkan ke iterasi berikutnya
         if (isset($detail['deleted']) && $detail['deleted'] == 'true') {
             $deletedDetails[] = $detail['id'];
             continue;
         }
 
-        // Jika bukan detail baru, lanjutkan dengan pemrosesan detail yang ada
         $detailId = $detail['id'];
         $detailStockout = DetailStockouts::findOrFail($detailId);
 
-        // Hitung selisih jumlah sebelum dan sesudah update
         $selisih = $detail['jumlah'] - $detailStockout->jumlah;
         $selisihJumlah[$detailId] = $selisih;
 
-        // Update detail stockout
         $detailStockout->id_barang = $detail['id_barang'];
         $detailStockout->id_area = $detail['id_area'];
         $detailStockout->id_line = $detail['id_line'];
@@ -176,34 +167,28 @@ class StockoutsController extends Controller
         $detailStockout->save();
     }
 
-    // Proses pengurangan atau penambahan stok di tabel material berdasarkan selisih jumlah
     foreach ($selisihJumlah as $detailId => $selisih) {
         $detailStockout = DetailStockouts::findOrFail($detailId);
 
-        // Update stok di tabel material
         $material = Materials::findOrFail($detailStockout->id_barang);
         if ($material) {
-            $material->stok += $selisih; // Adjust stock for stockout
+            $material->stok += $selisih;
             $material->save();
         }
     }
 
-    // Proses penghapusan detail stockout
     foreach ($deletedDetails as $detailId) {
         $detailStockout = DetailStockouts::findOrFail($detailId);
 
-        // Kembalikan stok ke tabel material
         $material = Materials::findOrFail($detailStockout->id_barang);
         if ($material) {
-            $material->stok += $detailStockout->jumlah; // Adjust stock for deleted stockout detail
+            $material->stok += $detailStockout->jumlah;
             $material->save();
         }
 
-        // Hapus detail stockout
         $detailStockout->delete();
     }
 
-    // Redirect dengan pesan sukses
     $mess = ["type" => "success", "text" => "Data Berhasil Dirubah"];
     return redirect($this->route)->with($mess);
 }
@@ -211,8 +196,39 @@ class StockoutsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Stockouts $stockouts)
+    public function destroy(Stockouts $stockouts, $id)
     {
-        //
+       $stockout = Stockouts::findOrFail($id);
+
+       foreach ($stockout->details as $detail) {
+           $material = Materials::findOrFail($detail->id_barang);
+           if ($material) {
+               $material->stok -= $detail->jumlah;
+               $material->save();
+           }
+       }
+
+       foreach ($stockout->details as $detail) {
+           $detail->delete();
+       }
+
+       $stockout->delete();
+
+       $mess = ["type" => "success", "text" => "Data Berhasil Dihapus"];
+       return redirect($this->route)->with($mess);
+    }
+
+    public function ExportExcel()
+    {
+        return Excel::download(new StockoutExport, 'Data Stok Keluar.xlsx');
+    }
+
+    public function exportPDF()
+    {
+        $stockout = Stockouts::with('user','details.material', 'details.area', 'details.line', 'details.drawing')->get();
+        $pdf = PDF::loadView($this->view.'pdf', compact('stockout'))->setPaper('a4', 'landscape');
+        // return $pdf->download('Data Material.pdf');
+        // return view($this->view.'pdf',compact('material'));
+          return $pdf->stream();
     }
 }

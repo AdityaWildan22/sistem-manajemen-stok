@@ -43,9 +43,15 @@ Route::resource('users',UserController::class);
 Route::resource('materials',MaterialsController::class);
 Route::get('/material/search', [MaterialsController::class, 'search'])->name('material.search');
 Route::get('/material/search2', [MaterialsController::class, 'search2'])->name('material.search2');
+Route::get('material/export-excel', [MaterialsController::class, 'exportExcel']);
+Route::get('material/export-pdf', [MaterialsController::class, 'exportPDF']);
 
 // Route Stockin
 Route::resource('stockins',StockinsController::class);
+Route::get('stockin/export-excel', [StockinsController::class, 'ExportExcel']);
+Route::get('stockin/export-pdf', [StockinsController::class, 'exportPDF']);
 
 // Route Stockout
 Route::resource('stockouts',StockoutsController::class);
+Route::get('stockout/export-excel', [StockoutsController::class, 'ExportExcel']);
+Route::get('stockout/export-pdf', [StockoutsController::class, 'exportPDF']);
