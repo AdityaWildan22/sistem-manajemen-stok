@@ -10,6 +10,17 @@ $(function () {
         "responsive": true,
     });
 
+    $('#datadetail').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "iDisplayLength": 10,
+        "searching": true,
+        // "ordering": true,
+        // "info": true,
+        // "autoWidth": true,
+        "responsive": true,
+    });
+
     flatpickr("#tgl_input", {
         enableTime: false,
         // time_24hr: true,

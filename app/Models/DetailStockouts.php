@@ -38,4 +38,9 @@ class DetailStockouts extends Model
     {
         return $this->belongsTo(drawings::class,'id_drawing','id');
     }
+
+    public function material()
+    {
+        return $this->belongsTo(Materials::class,'id_barang','id');
+    }
 }
