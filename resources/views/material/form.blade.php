@@ -47,7 +47,6 @@
                                     </option>
                                 @endforeach
                             </select>
-
                             @if ($errors->has('id_cat'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('id_cat') }}

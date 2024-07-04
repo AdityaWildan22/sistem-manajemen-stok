@@ -22,7 +22,20 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'=>'required',
+            'divisi'=>'required',
+            'username'=>'required',
+            'password'=>'required',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required'=>'Nama Harus Diisi',
+            'divisi.required'=>'Divisi Harus Diisi',
+            'username.required'=>'Username Harus Diisi',
+            'password.required'=>'Password Harus Diisi',
         ];
     }
 }

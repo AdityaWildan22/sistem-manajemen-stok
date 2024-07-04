@@ -11,12 +11,23 @@
             @endif
             <div class="form-group">
                 <label for="no_trans">Nomor Transaksi</label>
-                <input type="text" class="form-control" id="no_trans" name="no_trans" value="{{ $stockin->no_trans ?? '' }}">
+                <input type="text" class="form-control @error('no_trans') is-invalid  @enderror" id="no_trans"
+                    name="no_trans" value="{{ $stockin->no_trans ?? '' }}">
+                @if ($errors->has('no_trans'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('no_trans') }}
+                    </div>
+                @endif
             </div>
             <div class="form-group">
                 <label for="date">Tanggal Masuk</label>
-                <input type="date" class="form-control" id="tgl_input" name="tgl_masuk"
-                    value="{{ $stockin->tgl_masuk ?? '' }}">
+                <input type="date" class="form-control @error('tgl_masuk') is-invalid  @enderror" id="tgl_input"
+                    name="tgl_masuk" value="{{ $stockin->tgl_masuk ?? '' }}">
+                @if ($errors->has('tgl_masuk'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('tgl_masuk') }}
+                    </div>
+                @endif
             </div>
             <div class="form-group">
                 <table class="table" id="details_table">
@@ -34,8 +45,8 @@
                                     <input type="hidden" name="details[{{ $index }}][id]" value="{{ $detail->id }}">
                                     <input type="hidden" name="details[{{ $index }}][deleted]" value="false">
                                     <td>
-                                        <select class="form-control select2" name="details[{{ $index }}][id_barang]"
-                                            required>
+                                        <select class="form-control select2 @error('id_brg') is-invalid @enderror"
+                                            name="details[{{ $index }}][id_barang]">
                                             <option value="" disabled>- Pilih Material -</option>
                                             @foreach ($material as $item)
                                                 <option value="{{ $item->id }}"
@@ -44,9 +55,20 @@
                                                 </option>
                                             @endforeach
                                         </select>
+                                        @if ($errors->has('id_brg'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('id_brg') }}
+                                            </div>
+                                        @endif
                                     </td>
-                                    <td><input type="number" class="form-control" name="details[{{ $index }}][jumlah]"
-                                            value="{{ $detail->jumlah }}" required></td>
+                                    <td><input type="number" class="form-control @error('jumlah') is-invalid @enderror"
+                                            name="details[{{ $index }}][jumlah]" value="{{ $detail->jumlah }}">
+                                        @if ($errors->has('id_brg'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('id_brg') }}
+                                            </div>
+                                        @endif
+                                    </td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-sm remove-detail"
                                             data-detail-id="{{ $detail->id }}"><i class="fas fa-trash"></i></button>
@@ -75,9 +97,9 @@
                 var html = '<tr>';
                 html += '<input type="hidden" name="details[' + rowCount + '][new]" value="true">';
                 html += '<td><select class="form-control select2" name="details[' + rowCount +
-                    '][id_barang]" required> <option value="" selected disabled>- Pilih Material -</option>@foreach ($material as $item)<option value="{{ $item->id }}">{{ $item->nm_brg }}</option>@endforeach</select></td>';
+                    '][id_barang]"> <option value="" selected disabled>- Pilih Material -</option>@foreach ($material as $item)<option value="{{ $item->id }}">{{ $item->nm_brg }}</option>@endforeach</select></td>';
                 html += '<td><input type="number" class="form-control" name="details[' + rowCount +
-                    '][jumlah]" required></td>';
+                    '][jumlah]"></td>';
                 html +=
                     '<td><button type="button" class="btn btn-danger btn-sm remove-detail"><i class="fas fa-trash"></i></button></td>';
                 html += '</tr>';

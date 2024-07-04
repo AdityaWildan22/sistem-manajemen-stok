@@ -30,7 +30,7 @@ class StoreSubcategoriesRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id_cat.required'=>'Kategori Harus Diisi',
+            'id_cat.required'=>'Kategori Harus Dipilih',
             'nm_subcat.required'=>'Sub Kategori Harus Diisi',
         ];
     }

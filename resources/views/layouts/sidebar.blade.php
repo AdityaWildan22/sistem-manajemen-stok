@@ -1,6 +1,6 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-        <span class="app-brand-text demo menu-text fw-bolder ms-4">StockMat</span>
+        <span class="app-brand demo menu-text fw-bolder ms-4" style="font-size: 35px">StockMat</span>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
@@ -11,7 +11,7 @@
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ url('/') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
@@ -39,69 +39,34 @@
             </ul>
         </li>
         <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <a href="{{ url('kategoris') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-category"></i>
                 <div data-i18n="Kategori">Kategori</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('kategoris') }}" class="menu-link">
-                        <div data-i18n="Basic">Data Kategori</div>
-                    </a>
-                </li>
-            </ul>
         </li>
         <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <a href="{{ url('subkategoris') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-category-alt"></i>
                 <div data-i18n="Sub Kategori">Sub Kategori</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('subkategoris') }}" class="menu-link">
-                        <div data-i18n="Data Sub Kategori">Data Sub Kategori</div>
-                    </a>
-                </li>
-            </ul>
         </li>
         <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <a href="{{ url('areas') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-area"></i>
                 <div data-i18n="Area">Area</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('areas') }}" class="menu-link">
-                        <div data-i18n="Data Area">Data Area</div>
-                    </a>
-                </li>
-            </ul>
         </li>
         <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <a href="{{ url('lines') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-line-chart"></i>
                 <div data-i18n="Line">Line</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('lines') }}" class="menu-link">
-                        <div data-i18n="Data Line">Data Line</div>
-                    </a>
-                </li>
-            </ul>
         </li>
         <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <a href="{{ url('drawings') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                <div data-i18n="Drawing">Drawing</div>
+                <div data-i18n="Data Laporan">Drawing</div>
             </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('drawings') }}" class="menu-link">
-                        <div data-i18n="Data Drawing">Data Drawing</div>
-                    </a>
-                </li>
-            </ul>
         </li>
         <!-- Components -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Transaksi</span></li>
@@ -146,7 +111,7 @@
         <!-- Misc -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Laporan</span></li>
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ url('/laporan') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-book"></i>
                 <div data-i18n="Data Laporan">Data Laporan</div>
             </a>

@@ -22,7 +22,20 @@ class UpdateStockinsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'no_trans' => 'required',
+            'tgl_masuk' => 'required',
+            'details.*.id_barang' => 'required',
+            'details.*.jumlah' => 'required',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'no_trans.required' => 'Nomor Transaksi Harus Diisi',
+            'tgl_masuk.required' => 'Tanggal Masuk Harus Diisi',
+            'details.*.id_barang.required' => 'Nama Material Harus Diisi',
+            'details.*.jumlah.required' => 'Jumlah Harus Diisi',
         ];
     }
 }

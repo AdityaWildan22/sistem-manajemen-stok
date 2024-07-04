@@ -22,7 +22,26 @@ class UpdateMaterialsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'kd_brg'=>'required',
+            'nm_brg'=>'required',
+            'id_cat'=>'required',
+            'id_subcat'=>'required',
+            'size1'=>'required',
+            'satuan'=>'required',
+            'stok'=>'required',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'kd_brg.required' => 'Kode Material Harus Diisi',
+            'nm_brg.required' => 'Nama Material Harus Diisi',
+            'id_cat.required' => 'Kategori Harus Dipilih',
+            'id_subcat.required' => 'Subkategori Harus Dipilih',
+            'size1.required' => 'Ukuran Harus Diisi',
+            'satuan.required' => 'Satuan Harus Diisi',
+            'stok.required' => 'Stok Harus Diisi',
         ];
     }
 }

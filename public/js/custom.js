@@ -27,6 +27,20 @@ $(function () {
         dateFormat: "Y-m-d",
         locale: "id",
     });
+
+    flatpickr("#tgl_akhir", {
+        enableTime: false,
+        // time_24hr: true,
+        dateFormat: "Y-m-d",
+        locale: "id",
+    });
+
+    flatpickr("#tgl_awal", {
+        enableTime: false,
+        // time_24hr: true,
+        dateFormat: "Y-m-d",
+        locale: "id",
+    });
     
 });
 

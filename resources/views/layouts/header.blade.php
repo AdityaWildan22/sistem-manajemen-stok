@@ -14,6 +14,7 @@
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/css/core.css') }}" class="template-customizer-core-css" />
     <link rel="stylesheet" href="{{ asset('vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('vendor/css/sb-admin-2.min.css') }}" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{ asset('css/demo.css') }}" />
 
     <!-- Vendors CSS -->

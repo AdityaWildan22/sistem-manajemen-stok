@@ -30,7 +30,7 @@ class StorelinesRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id_area.required'=>'Area Harus Diisi',
+            'id_area.required'=>'Area Harus Dipilih',
             'no_line.required'=>'No Line Harus Diisi',
         ];
     }

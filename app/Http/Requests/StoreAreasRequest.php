@@ -29,7 +29,7 @@ class StoreAreasRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nm_area.required'=>'Nama Area Harus Diisi',
+            'nm_area.required'=>'Nama Area Harus Dipilih',
         ];
     }
 }

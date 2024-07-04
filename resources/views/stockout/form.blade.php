@@ -12,13 +12,24 @@
             @endif
             <div class="form-group">
                 <label for="no_trans">Nomor Transaksi</label>
-                <input type="text" class="form-control" id="no_trans" name="no_trans"
-                    value="{{ $stockout->no_trans ?? '' }}">
+                <input type="text" class="form-control @error('no_trans') is-invalid  @enderror" id="no_trans"
+                    name="no_trans" value="{{ $stockout->no_trans ?? '' }}">
+                @if ($errors->has('no_trans'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('no_trans') }}
+                    </div>
+                @endif
+
             </div>
             <div class="form-group">
                 <label for="tgl_keluar">Tanggal Keluar</label>
-                <input type="date" class="form-control" id="tgl_input" name="tgl_keluar"
-                    value="{{ $stockout->tgl_keluar ?? '' }}">
+                <input type="date" class="form-control @error('tgl_keluar') is-invalid  @enderror" id="tgl_input"
+                    name="tgl_keluar" value="{{ $stockout->tgl_keluar ?? '' }}">
+                @if ($errors->has('tgl_keluar'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('tgl_keluar') }}
+                    </div>
+                @endif
             </div>
             <div class="form-group">
                 <table class="table" id="details_table">
@@ -38,8 +49,8 @@
                                 <input type="hidden" name="details[{{ $index }}][id]" value="{{ $detail->id }}">
                                 <input type="hidden" name="details[{{ $index }}][deleted]" value="false">
                                 <td>
-                                    <select class="form-control select2" name="details[{{ $index }}][id_barang]"
-                                        required>
+                                    <select class="form-control select2 @error('id_brg') is-invalid @enderror"
+                                        name="details[{{ $index }}][id_barang]" required>
                                         <option value="" disabled selected>- Pilih Material -</option>
                                         @foreach ($materials as $material)
                                             <option value="{{ $material->id }}"
@@ -48,9 +59,15 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    @if ($errors->has('id_brg'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('id_brg') }}
+                                        </div>
+                                    @endif
                                 </td>
                                 <td>
-                                    <select class="form-control" name="details[{{ $index }}][id_area]" required>
+                                    <select class="form-control @error('id_area') is-invalid @enderror"
+                                        name="details[{{ $index }}][id_area]" required>
                                         <option value="" disabled selected>- Pilih Area -</option>
                                         @foreach ($areas as $area)
                                             <option value="{{ $area->id }}"
@@ -59,9 +76,15 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    @if ($errors->has('id_area'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('id_area') }}
+                                        </div>
+                                    @endif
                                 </td>
                                 <td>
-                                    <select class="form-control" name="details[{{ $index }}][id_line]" required>
+                                    <select class="form-control @error('id_line') is-invalid @enderror"
+                                        name="details[{{ $index }}][id_line]" required>
                                         <option value="" disabled selected>- Pilih Line -</option>
                                         @foreach ($lines as $line)
                                             <option value="{{ $line->id }}"
@@ -70,9 +93,15 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    @if ($errors->has('id_line'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('id_line') }}
+                                        </div>
+                                    @endif
                                 </td>
                                 <td>
-                                    <select class="form-control" name="details[{{ $index }}][id_drawing]" required>
+                                    <select class="form-control @error('id_drawing') is-invalid @enderror"
+                                        name="details[{{ $index }}][id_drawing]" required>
                                         <option value="" disabled selected>- Pilih Drawing -</option>
                                         @foreach ($drawings as $drawing)
                                             <option value="{{ $drawing->id }}"
@@ -81,6 +110,11 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    @if ($errors->has('id_drawing'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('id_drawing') }}
+                                        </div>
+                                    @endif
                                 </td>
                                 <td>
                                     <input type="number" class="form-control" name="details[{{ $index }}][jumlah]"
@@ -97,7 +131,8 @@
                 <div class="form-group">
                     <button type="button" class="btn btn-primary btn-sm add-detail"><i class="fas fa-plus"></i> Tambah
                         Detail</button>
-                    <button type="submit" class="btn btn-primary btn-sm" style="float: right">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-sm" style="float: right"><i class="fas fa-save"></i>
+                        Simpan</button>
                 </div>
             </div>
         </form>

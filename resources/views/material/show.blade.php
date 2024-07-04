@@ -17,6 +17,10 @@
     }
 </style>
 @section('content')
+    <div class="card-shadow mb-3">
+        <a href="{{ route('materials.index') }}" class="btn" style="background-color:#4e73df;color:#fff"><i
+                class="fas fa-arrow-left"></i> Kembali</a>
+    </div>
     <div class="card">
         <div class="card-header bg-primary">
             <h2 class="card-title mb-0" style="font-size: 20px; color:#fff">DATA DETAIL MATERIAL

@@ -2,24 +2,22 @@
 
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DrawingsController;
 use App\Http\Controllers\LinesController;
 use App\Http\Controllers\MaterialsController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockinsController;
 use App\Http\Controllers\StockoutsController;
 use App\Http\Controllers\SubcategoriesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', [DashboardController::class,'index']);
 
-
-Route::get('/', function () {
-    return view('layouts.template');
-});
-
-Route::get('/material', function () {
-    return view('material.data');
-});
+// Route::get('/material', function () {
+//     return view('material.data');
+// });
 
 // Route Kategori
 Route::resource('kategoris',CategoriesController::class);
@@ -55,3 +53,11 @@ Route::get('stockin/export-pdf', [StockinsController::class, 'exportPDF']);
 Route::resource('stockouts',StockoutsController::class);
 Route::get('stockout/export-excel', [StockoutsController::class, 'ExportExcel']);
 Route::get('stockout/export-pdf', [StockoutsController::class, 'exportPDF']);
+
+// Route Laporan
+Route::get('laporan', [ReportController::class, 'index']);
+Route::get('laporan/material', [ReportController::class, 'rpt_material']);
+Route::get('laporan/stockin', [ReportController::class, 'rpt_stockin']);
+Route::get('laporan/stockout', [ReportController::class, 'rpt_stockout']);
+Route::post('laporan/stockin/pertanggal', [ReportController::class, 'rpt_stockin_tanggal']);
+Route::post('laporan/stockout/pertanggal', [ReportController::class, 'rpt_stockout_tanggal']);
