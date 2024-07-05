@@ -11,6 +11,11 @@ class SubcategoriesController extends Controller
     protected $view = 'subkategori.';
     protected $route = '/subkategoris/';
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         $routes = (object) [

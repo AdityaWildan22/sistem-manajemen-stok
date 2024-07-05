@@ -196,7 +196,7 @@
                             <textarea class="form-control" name="specification" id="specification" cols="30" rows="10">{{ @$materials->specification }}</textarea>
                         </div>
                         <div class="form-group mb-0" style="display: flex; justify-content:end">
-                            <button type="submit" class="btn btn-md btn-primary">
+                            <button type="submit" class="btn btn-md" style="background-color:#4e73df; color:#fff">
                                 <i class="fas fa-save"></i> Simpan
                             </button>
                         </div>

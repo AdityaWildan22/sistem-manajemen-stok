@@ -12,6 +12,11 @@ class ReportController extends Controller
 {
     protected $view = 'laporan.';
     
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index(){
         
         return view($this->view.'index');

@@ -57,55 +57,8 @@
                                 </div>
                             @endif
                         </div>
-                        {{-- <div class="form-group">
-                            <label for="role">Role</label>
-                            <select class="custom-select rounded-0  @error('role') is-invalid  @enderror" id="role"
-                                name="role">
-                                <option value="" selected="true" disabled>- Pilih Role -</option>
-                                <option {{ old('role', @$user->role) == 'SuperAdmin' ? 'selected' : '' }}
-                                    value="SuperAdmin">SuperAdmin
-                                </option>
-                                <option {{ old('role', @$user->role) == 'Admin' ? 'selected' : '' }} value="Admin">
-                                    Admin
-                                </option>
-                                <option {{ old('role', @$user->role) == 'Manager' ? 'selected' : '' }} value="Manager">
-                                    Manager
-                                </option>
-                                <option {{ old('role', @$user->role) == 'SPV' ? 'selected' : '' }} value="SPV">
-                                    SPV
-                                </option>
-                                <option {{ old('role', @$user->role) == 'Staff' ? 'selected' : '' }} value="Staff">
-                                    Staff
-                                </option>
-                            </select>
-                            @if ($errors->has('role'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('role') }}
-                                </div>
-                            @endif
-                        </div> --}}
-                        {{-- <div class="form-group">
-                            <label for="jenis_kelamin">Jenis Kelamin</label>
-                            <select class="custom-select rounded-0  @error('jenis_kelamin') is-invalid  @enderror"
-                                id="jenis_kelamin" name="jenis_kelamin">
-                                <option value="" selected="true" disabled>- Pilih Jenis Kelamin -</option>
-                                <option
-                                    {{ old('jenis_kelamin', @$user->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}
-                                    value="Laki-laki">Laki-laki
-                                </option>
-                                <option
-                                    {{ old('jenis_kelamin', @$user->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}
-                                    value="Perempuan">Perempuan
-                                </option>
-                            </select>
-                            @if ($errors->has('jenis_kelamin'))
-                                <div class="invalid-feedback">
-                                    {{ $errors->first('jenis_kelamin') }}
-                                </div>
-                            @endif
-                        </div> --}}
                         <div class="form-group mb-0" style="display: flex; justify-content:end">
-                            <button type="submit" class="btn btn-md btn-primary">
+                            <button type="submit" class="btn btn-md" style="background-color:#4e73df; color:#fff">
                                 <i class="fas fa-save"></i> Simpan
                             </button>
                         </div>

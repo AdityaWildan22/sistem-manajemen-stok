@@ -35,19 +35,26 @@
                                             class="w-px-40 h-auto rounded-circle" />
                                     </div>
                                     <div>
-                                        <span class="fw-semibold d-block">John Doe</span>
-                                        <small class="text-muted">Admin</small>
+                                        <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
+                                        <small class="text-muted">{{ Auth::user()->divisi }}</small>
                                     </div>
                                 </a>
 
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <a class="dropdown-item" href="auth-login-basic.html">
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                        </form>
+                                        <a class="dropdown-item" href="#"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                            style="text-decoration: none !important">
                                             <i class="bx bx-power-off me-2"></i>
                                             <span class="align-middle">Log Out</span>
                                         </a>
                                     </li>
                                 </ul>
+
                             </li>
                             <!--/ User -->
                         </ul>

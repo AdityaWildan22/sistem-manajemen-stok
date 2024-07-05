@@ -61,3 +61,7 @@ Route::get('laporan/stockin', [ReportController::class, 'rpt_stockin']);
 Route::get('laporan/stockout', [ReportController::class, 'rpt_stockout']);
 Route::post('laporan/stockin/pertanggal', [ReportController::class, 'rpt_stockin_tanggal']);
 Route::post('laporan/stockout/pertanggal', [ReportController::class, 'rpt_stockout_tanggal']);
+Auth::routes();
+
+Auth::routes(['register' => false]);
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

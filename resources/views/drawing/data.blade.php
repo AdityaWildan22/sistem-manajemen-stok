@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header bg-primary">
+                <div class="card-header" style="background-color:#4e73df">
                     <h1 class="card-title mb-0" style="font-size:18px; color:#fff">FORM DATA DRAWING</h1>
                 </div>
                 <div class="card-body mt-3">
@@ -53,7 +53,7 @@
                             @enderror
                         </div>
                         <div class="form-group mb-0" style="display: flex; justify-content:end">
-                            <button type="submit" class="btn btn-md btn-primary">
+                            <button type="submit" class="btn btn-md" style="background-color:#4e73df; color:#fff">
                                 <i class="fas fa-save"></i> Simpan
                             </button>
                         </div>
@@ -63,7 +63,7 @@
         </div>
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-primary">
+                <div class="card-header" style="background-color:#4e73df">
                     <h1 class="card-title mb-0" style="color: #fff; font-size:18px">DATA DRAWING</h1>
                 </div>
                 <div class="card-body mt-3">

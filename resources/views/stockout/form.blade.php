@@ -129,9 +129,11 @@
                     </tbody>
                 </table>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary btn-sm add-detail"><i class="fas fa-plus"></i> Tambah
+                    <button type="button" class="btn btn-sm add-detail" style="background-color:#4e73df; color:#fff"><i
+                            class="fas fa-plus"></i> Tambah
                         Detail</button>
-                    <button type="submit" class="btn btn-primary btn-sm" style="float: right"><i class="fas fa-save"></i>
+                    <button type="submit" class="btn btn-sm" style="background-color:#4e73df; color:#fff; float: right;"><i
+                            class="fas fa-save"></i>
                         Simpan</button>
                 </div>
             </div>

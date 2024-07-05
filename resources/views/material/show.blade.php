@@ -22,7 +22,7 @@
                 class="fas fa-arrow-left"></i> Kembali</a>
     </div>
     <div class="card">
-        <div class="card-header bg-primary">
+        <div class="card-header" style="background-color:#4e73df">
             <h2 class="card-title mb-0" style="font-size: 20px; color:#fff">DATA DETAIL MATERIAL
         </div>
         <div class="card-body">
