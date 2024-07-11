@@ -19,4 +19,9 @@ class drawings extends Model
     {
         return $this->belongsTo(Areas::class, 'id_area','id');
     }
+
+    public function line()
+    {
+        return $this->belongsTo(lines::class, 'id_drawing','id');
+    }
 }

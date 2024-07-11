@@ -8,8 +8,11 @@ use App\Http\Requests\UpdateStockinsRequest;
 use App\Models\DetailStockins;
 use App\Models\Materials;
 use App\Models\Stockins;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\PDF;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class StockinsController extends Controller
 {
@@ -32,7 +35,7 @@ class StockinsController extends Controller
             'add' => $this->route . 'create',
         ];
 
-        $stockin = Stockins::with('details', 'user')->get();
+        $stockin = Stockins::with('details', 'user','enginer')->get();
 
         // dd($stockin->$users->all());
         return view($this->view.'data',compact('routes','stockin'));
@@ -50,39 +53,49 @@ class StockinsController extends Controller
         ];
 
         $material = Materials::All();
-        return view($this->view.'form',compact('routes','material'));
+        $enginer = User::where('divisi','ENGINER')->get();
+        return view($this->view.'form',compact('routes','material','enginer'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreStockinsRequest $request)
-{
-    // Simpan data stok masuk
-    $stockin = Stockins::create([
-        'no_trans' => $request->no_trans,
-        'tgl_masuk' => $request->tgl_masuk,
-        'id_user' => 1, // Sesuaikan dengan id_user yang sesuai
-    ]);
+    {
+        
+        $filePath = null;
+        
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $path = $file->store('public/nota_masuk');
+            $filePath = Storage::url($path);
+        }
 
-    // Simpan detail stok masuk dan update stok material
-    foreach ($request->details as $detail) {
-        DetailStockins::create([
-            'id_stockin' => $stockin->id,
-            'id_barang' => $detail['id_barang'],
-            'jumlah' => $detail['jumlah'],
+        $stockin = Stockins::create([
+            'no_trans' => $request->no_trans,
+            'tgl_masuk' => $request->tgl_masuk,
+            'id_user' => Auth::user()->id,
+            'id_enginer' => $request->id_enginer,
+            'foto' => $filePath,
         ]);
 
-        // Update stok di tabel material
-        $material = Materials::find($detail['id_barang']);
-        if ($material) {
-            $material->increment('stok', $detail['jumlah']);
-        }
-    }
+        foreach ($request->details as $detail) {
+            DetailStockins::create([
+                'id_stockin' => $stockin->id,
+                'id_barang' => $detail['id_barang'],
+                'jumlah' => $detail['jumlah'],
+                'satuan' => $detail['satuan'],
+            ]);
 
-    $mess = ["type" => "success", "text" => "Data Berhasil Disimpan"];
-    return redirect($this->route)->with($mess);
-}
+            $material = Materials::find($detail['id_barang']);
+            if ($material) {
+                $material->increment('stok', $detail['jumlah']);
+            }
+        }
+
+        $mess = ["type" => "success", "text" => "Data Berhasil Disimpan"];
+        return redirect($this->route)->with($mess);
+    }
 
 
     /**
@@ -90,7 +103,7 @@ class StockinsController extends Controller
      */
     public function show(Stockins $stockins, $id)
     {
-        $stockIn = Stockins::with('details.material','user')->findOrFail($id);
+        $stockIn = Stockins::with('details.material','user','enginer')->findOrFail($id);
         return view($this->view . 'show', compact('stockIn'));
     }
 
@@ -101,85 +114,100 @@ class StockinsController extends Controller
     {
         $stockin = Stockins::findOrFail($id);
         $material = Materials::all();
+        $enginer = User::where('divisi','ENGINER')->get();
         $routes =(object)[
             'index'=> $this->route,
             'save' => $this->route,
             'is_update'=>true,
         ];
-        return view($this->view.'form', compact('stockin', 'material','routes'));
+        return view($this->view.'form', compact('stockin', 'material','routes','enginer'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateStockinsRequest $request, $id)
-{
-    $stockin = Stockins::findOrFail($id);
+    {
+        $stockin = Stockins::findOrFail($id);
 
-    $stockin->no_trans = $request->no_trans;
-    $stockin->tgl_masuk = $request->tgl_masuk;
-    $stockin->save();
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $path = $file->store('public/nota_masuk');
+            $filePath = Storage::url($path);
+        
+            if ($stockin->foto) {
+                Storage::delete($stockin->foto);
+            }
+    
+            $stockin->foto = $filePath;
+        }
 
-    $selisihJumlah = [];
-    $deletedDetails = [];
+        $stockin->no_trans = $request->no_trans;
+        $stockin->tgl_masuk = $request->tgl_masuk;
+        $stockin->id_enginer = $request->id_enginer;
+        $stockin->save();
 
-    foreach ($request->details as $key => $detail) {
-        if (isset($detail['new'])) {
-            $newDetail = DetailStockins::create([
-                'id_stockin' => $stockin->id,
-                'id_barang' => $detail['id_barang'],
-                'jumlah' => $detail['jumlah'],
-            ]);
+        $selisihJumlah = [];
+        $deletedDetails = [];
 
-            $material = Materials::findOrFail($detail['id_barang']);
-            if ($material) {
-                $material->stok += $detail['jumlah'];
-                $material->save();
+        foreach ($request->details as $key => $detail) {
+            if (isset($detail['new'])) {
+                $newDetail = DetailStockins::create([
+                    'id_stockin' => $stockin->id,
+                    'id_barang' => $detail['id_barang'],
+                    'jumlah' => $detail['jumlah'],
+                    'satuan' => $detail['satuan']
+                ]);
+
+                $material = Materials::findOrFail($detail['id_barang']);
+                if ($material) {
+                    $material->stok += $detail['jumlah'];
+                    $material->save();
+                }
+
+                continue;
             }
 
-            continue;
+            if (isset($detail['deleted']) && $detail['deleted'] == 'true') {
+                $deletedDetails[] = $detail['id'];
+                continue;
+            }
+
+            $detailId = $detail['id'];
+            $detailStockin = DetailStockins::findOrFail($detailId);
+
+            $selisih = $detail['jumlah'] - $detailStockin->jumlah;
+            $selisihJumlah[$detailId] = $selisih;
+
+            $detailStockin->id_barang = $detail['id_barang'];
+            $detailStockin->jumlah = $detail['jumlah'];
+            $detailStockin->save();
         }
 
-        if (isset($detail['deleted']) && $detail['deleted'] == 'true') {
-            $deletedDetails[] = $detail['id'];
-            continue;
+        foreach ($selisihJumlah as $detailId => $selisih) {
+            $detailStockin = DetailStockins::findOrFail($detailId);
+
+            $material = Materials::findOrFail($detailStockin->id_barang);
+            if ($material) {
+                $material->stok += $selisih;
+                $material->save();
+            }
         }
 
-        $detailId = $detail['id'];
-        $detailStockin = DetailStockins::findOrFail($detailId);
+        foreach ($deletedDetails as $detailId) {
+            $detailStockin = DetailStockins::findOrFail($detailId);
 
-        $selisih = $detail['jumlah'] - $detailStockin->jumlah;
-        $selisihJumlah[$detailId] = $selisih;
+            $material = Materials::findOrFail($detailStockin->id_barang);
+            if ($material) {
+                $material->stok -= $detailStockin->jumlah;
+                $material->save();
+            }
+            $detailStockin->delete();
+        }
 
-        $detailStockin->id_barang = $detail['id_barang'];
-        $detailStockin->jumlah = $detail['jumlah'];
-        $detailStockin->save();
+        $mess = ["type" => "success", "text" => "Data Berhasil Diupdate"];
+        return redirect($this->route)->with($mess);
     }
-
-    foreach ($selisihJumlah as $detailId => $selisih) {
-        $detailStockin = DetailStockins::findOrFail($detailId);
-
-        $material = Materials::findOrFail($detailStockin->id_barang);
-        if ($material) {
-            $material->stok += $selisih;
-            $material->save();
-        }
-    }
-
-    foreach ($deletedDetails as $detailId) {
-        $detailStockin = DetailStockins::findOrFail($detailId);
-
-        $material = Materials::findOrFail($detailStockin->id_barang);
-        if ($material) {
-            $material->stok -= $detailStockin->jumlah;
-            $material->save();
-        }
-        $detailStockin->delete();
-    }
-
-    $mess = ["type" => "success", "text" => "Data Berhasil Diupdate"];
-    return redirect($this->route)->with($mess);
-}
     
     /**
      * Remove the specified resource from storage.
@@ -215,7 +243,7 @@ class StockinsController extends Controller
     {
         $stockin = Stockins::with('user','details.material')->get();
         $pdf = PDF::loadView($this->view.'pdf', compact('stockin'))->setPaper('a4', 'landscape');
-        // return $pdf->download('Data Material.pdf');
+        return $pdf->download('Data Stok Masuk.pdf');
         // return view($this->view.'pdf',compact('material'));
           return $pdf->stream();
     }

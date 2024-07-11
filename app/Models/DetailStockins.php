@@ -16,6 +16,7 @@ class DetailStockins extends Model
         'id_stockin',
         'id_barang',
         'jumlah',
+        'satuan',
     ];
 
     public function stockIn()

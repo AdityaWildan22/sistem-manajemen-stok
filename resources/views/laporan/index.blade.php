@@ -11,10 +11,10 @@
         </div>
     @endif
     <div class="row justify-content-center">
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-header" style="background-color:#4e73df">
-                    <h2 class="card-title mb-0" style="font-size:18px; color:#fff">Laporan Data Stok Masuk Per Tanggal</h2>
+                    <h2 class="card-title mb-0" style="font-size:18px; color:#fff">Laporan Stok Masuk Tanggal</h2>
                 </div>
                 <div class="card-body">
                     <form action="{{ url('/laporan/stockin/pertanggal') }}" method="post" target="_blank">
@@ -41,10 +41,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-header" style="background-color:#4e73df">
-                    <h2 class="card-title mb-0" style="font-size:18px; color:#fff">Laporan Data Stok Keluar Per Tanggal</h2>
+                    <h2 class="card-title mb-0" style="font-size:18px; color:#fff">Laporan Stok Keluar Tanggal</h2>
                 </div>
                 <div class="card-body">
                     <form action="{{ url('/laporan/stockout/pertanggal') }}" method="post" target="_blank">
@@ -68,7 +68,32 @@
                 </div>
             </div>
         </div>
-
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header" style="background-color:#4e73df">
+                    <h2 class="card-title mb-0" style="font-size:18px; color:#fff">Laporan Stok Keluar Supervisor</h2>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url('/laporan/stockout/perspv') }}" method="post" target="_blank">
+                        @csrf
+                        <div class="form-group mt-3">
+                            <label for="supervisor">Pilih Supervisor</label>
+                            <select class="form-control" id="supervisor" name="supervisor">
+                                <option value="">Pilih Supervisor</option>
+                                @foreach ($supervisor as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mb-0 text-right">
+                            <button type="submit" class="btn btn-md btn-primary">
+                                <i class="fas fa-eye"></i> Lihat
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="col-md-4 mt-3">
             <div class="card">
                 <div class="card-header" style="background-color:#4e73df">
@@ -121,4 +146,32 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#supervisor').select2({
+                placeholder: 'Cari Supervisor',
+                width: '100%',
+                ajax: {
+                    url: '{{ route('supervisor.search') }}',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            query: params.term
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data.map(function(supervisor) {
+                                return {
+                                    id: supervisor.id,
+                                    text: supervisor.name,
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+    </script>
 @endsection

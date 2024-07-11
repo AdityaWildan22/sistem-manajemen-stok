@@ -21,6 +21,24 @@ $(function () {
         "responsive": true,
     });
 
+    $('#data-dashboard').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "lengthMenu": [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ],
+        "iDisplayLength": 5,
+        "searching": true,
+        "responsive": true,
+    });
+
+    $('#data-dashboard2').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "lengthMenu": [ [5, 10, 25, 50, -1], [5, 10, 25, 50, "All"] ],
+        "iDisplayLength": 5,
+        "searching": true,
+        "responsive": true,
+    });
+
     flatpickr("#tgl_input", {
         enableTime: false,
         // time_24hr: true,
@@ -41,8 +59,36 @@ $(function () {
         dateFormat: "Y-m-d",
         locale: "id",
     });
+
+    // Foto click
+    $("#avatar").click(function () {
+        $("#file").click();
+    });
+
+    // Ketika file input change
+    $("#file").change(function () {
+        setImage(this, "#avatar");
+    });
+    
     
 });
+
+// Read Image
+function setImage(input, target) {
+
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+  
+      // Mengganti src dari object img#avatar
+      reader.onload = function (e) {
+        $(target).attr('src', e.target.result);
+        $("#foto").val(e.target.result);
+      }
+  
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  
 
 
 function showMessage(type, mess, target = "body") {
@@ -79,13 +125,13 @@ function showMessage(type, mess, target = "body") {
     }
 }
 
-// Ambil elemen alert
-var alert = $(".alert");
+// // Ambil elemen alert
+// var alert = $(".alert");
 
-// Tentukan durasi timeout dalam milidetik
-var timeoutDuration = 5000;
+// // Tentukan durasi timeout dalam milidetik
+// var timeoutDuration = 5000;
 
-// Tunggu selama durasi timeout, lalu tutup alert
-setTimeout(function() {
-    alert.alert('close');
-}, timeoutDuration);
+// // Tunggu selama durasi timeout, lalu tutup alert
+// setTimeout(function() {
+//     alert.alert('close');
+// }, timeoutDuration);

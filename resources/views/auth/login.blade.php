@@ -2,7 +2,7 @@
 @section('content')
     <style>
         .col-lg-6 img {
-            max-width: 30%;
+            max-width: 80%;
             max-height: 100%;
             display: block;
             margin: auto;
@@ -36,7 +36,7 @@
                     <div class="card-body p-0">
                         <div class="teks mt-3">
                             <h5
-                                style="text-align: center; margin-top:10px; font-family: Verdana, Geneva, Tahoma, sans-serif">
+                                style="text-align: center; margin-top:10px; font-family: Verdana, Geneva, Tahoma, sans-serif;color:#000">
                                 Sistem Management Stok <br> StockMat</h5>
                         </div>
                         <div class="row">

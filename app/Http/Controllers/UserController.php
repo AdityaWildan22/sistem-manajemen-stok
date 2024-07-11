@@ -86,18 +86,18 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, $id)
     {
         $user = User::findOrFail($id);
-
+    
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
     
-        // Mengisi atribut lain
         $user->fill($request->except(['password', 'old_password']));
         $user->save();
-
+    
         $mess = ["type" => "success", "text" => "Data Berhasil Dirubah"];
         return redirect($this->route)->with($mess);
     }
+    
 
     /**
      * Remove the specified resource from storage.

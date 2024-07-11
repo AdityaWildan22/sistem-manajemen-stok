@@ -24,7 +24,9 @@ class UpdateStockoutsRequest extends FormRequest
         return [
             'no_trans' => 'required',
             'tgl_keluar' => 'required',
+            'file' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
             'details.*.id_barang' => 'required',
+            'details' => 'required|array|min:1',
             'details.*.jumlah' => 'required',
             'details.*.id_area' => 'required',
             'details.*.id_line' => 'required',
@@ -37,6 +39,10 @@ class UpdateStockoutsRequest extends FormRequest
         return [
             'no_trans.required' => 'Nomor transaksi wajib diisi',
             'tgl_keluar.required' => 'Tanggal keluar wajib diisi',
+            'file.image' => 'File Harus Berupa Gambar',
+            'file.mimes' => 'Ekstensi File Tidak Valid',
+            'file.max' => 'File Maksimal 2Mb',
+            'details.required' => 'Detail Harus Diisi',
             'details.*.id_barang.required' => 'Nama material wajib diisi',
             'details.*.jumlah.required' => 'Jumlah wajib diisi',
             'details.*.id_area.required' => 'Area wajib diisi',

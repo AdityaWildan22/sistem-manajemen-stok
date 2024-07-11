@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('lines', function (Blueprint $table) {
             $table->id();
             $table->integer('id_area');
+            $table->integer('id_drawing');
             $table->string('no_line',50);
             $table->timestamps();
         });

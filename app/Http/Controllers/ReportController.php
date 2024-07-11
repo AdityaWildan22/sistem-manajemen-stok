@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Materials;
 use App\Models\Stockins;
 use App\Models\Stockouts;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,8 +19,9 @@ class ReportController extends Controller
     }
     
     public function index(){
+        $supervisor = User::where('divisi', 'SUPERVISOR')->get();
         
-        return view($this->view.'index');
+        return view($this->view.'index',compact('supervisor'));
     }
 
     public function rpt_material(){
@@ -35,7 +37,7 @@ class ReportController extends Controller
     }
 
     public function rpt_stockout(){
-        $stockouts = Stockouts::with('user','details.material', 'details.area', 'details.line', 'details.drawing')->get();
+        $stockouts = Stockouts::with('user','supervisor','enginer','details.material', 'details.area', 'details.line', 'details.drawing')->get();
         return view($this->view.'laporan_Stockout',compact('stockouts'));
     }
 
@@ -64,5 +66,30 @@ class ReportController extends Controller
     
         return view($this->view . 'laporan_Stockout', compact('stockouts'));
     }
+
+    public function searchSupervisor(Request $request)
+    {
+        $query = $request->input('query');
+
+        $supervisors = User::where('divisi', 'SUPERVISOR')
+                           ->where('name', 'like', "%$query%")
+                           ->get(['id', 'name']);
+
+        return response()->json($supervisors);
+    }
+
+    public function rpt_stockout_spv(Request $request)
+    {
+        $supervisor = User::where('divisi', 'SUPERVISOR')->get();
+    
+        $supervisorId = $request->input('supervisor');
+    
+        $stockouts = Stockouts::with(['user', 'details.material','supervisor'])
+            ->where('id_supervisor', $supervisorId)
+            ->get();
+    
+        return view($this->view . 'laporan_Stockout', compact('stockouts', 'supervisor'));
+    }
+    
     
 }

@@ -26,10 +26,13 @@ class StockoutExport implements FromCollection, WithHeadings, WithStyles, Should
                         'no_trans' => $stockOut->no_trans,
                         'tgl_keluar' => Carbon::parse($stockOut->tgl_keluar)->format('d-m-Y'),
                         'user' => $stockOut->user->name,
+                        'spv' => $stockOut->supervisor->name,
                         'nm_brg' => $detail->material->nm_brg,
+                        'enginer' => $stockOut->enginer->name,
                         'area' => $detail->area->nm_area,
                         'line' => $detail->line->no_line,
                         'drawing' => $detail->drawing->no_drw,
+                        'satuan' => $detail->satuan,
                         'jumlah' => $detail->jumlah,
                     ];
                 });
@@ -42,18 +45,21 @@ class StockoutExport implements FromCollection, WithHeadings, WithStyles, Should
         return [
             'Nomor Transaksi',
             'Tanggal Keluar',
+            'PJ',
             'Supervisor',
             'Nama Material',
+            'Request by Enginer',
             'Area',
             'Line',
             'Drawing',
+            'Satuan',
             'Jumlah',
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:H1')->applyFromArray([
+        $sheet->getStyle('A1:K1')->applyFromArray([
             'font' => [
                 'bold' => true,
             ],

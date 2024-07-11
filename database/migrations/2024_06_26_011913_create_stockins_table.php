@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('no_trans');
             $table->date('tgl_masuk');
             $table->integer('id_user');
+            $table->integer('id_enginer');
+            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('id_line');
             $table->integer('id_drawing');
             $table->integer('jumlah');
+            $table->string('satuan',50);
             $table->timestamps();
         });
     }

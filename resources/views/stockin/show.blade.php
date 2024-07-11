@@ -13,9 +13,14 @@
                 <td>{{ Carbon\Carbon::parse($stockIn->tgl_masuk)->format('d-m-Y') }}</td>
             </tr>
             <tr>
-                <td>Supervisor</td>
+                <td>Staff</td>
                 <td>:</td>
                 <td>{{ $stockIn->user->name }}</td>
+            </tr>
+            <tr>
+                <td>Request by Enginer</td>
+                <td>:</td>
+                <td>{{ $stockIn->enginer->name }}</td>
             </tr>
         </table>
     </div>
@@ -29,6 +34,7 @@
                     <tr>
                         <th>No.</th>
                         <th>Nama Material</th>
+                        <th>Satuan</th>
                         <th>Jumlah</th>
                     </tr>
                 </thead>
@@ -37,6 +43,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $detail->material->nm_brg }}</td>
+                            <td>{{ $detail->satuan }}</td>
                             <td>{{ $detail->jumlah }}</td>
                         </tr>
                     @endforeach

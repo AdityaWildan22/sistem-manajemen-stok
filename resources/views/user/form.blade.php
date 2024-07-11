@@ -26,9 +26,31 @@
                         </div>
                         <div class="form-group">
                             <label for="divisi">Divisi</label>
-                            <input type="text" class="form-control @error('divisi') is-invalid  @enderror" id="divisi"
-                                name="divisi" placeholder="Masukkan Divisi"
-                                value="{{ old('divisi') ? old('divisi') : @$user->divisi }}">
+                            <select class="custom-select rounded-0 @error('divisi') is-invalid @enderror" id="divisi"
+                                name="divisi">
+                                <option value="" selected disabled>- Pilih Divisi -</option>
+                                <option {{ old('divisi', @$user->divisi) == 'MATERIAL' ? 'selected' : '' }}
+                                    value="MATERIAL">Material</option>
+                                <option {{ old('divisi', @$user->divisi) == 'ENGINER' ? 'selected' : '' }} value="ENGINER">
+                                    Enginer</option>
+                                <option {{ old('divisi', @$user->divisi) == 'ADMIN' ? 'selected' : '' }} value="ADMIN">
+                                    Admin</option>
+                                <option {{ old('divisi', @$user->divisi) == 'PPC' ? 'selected' : '' }} value="PPC">Ppc
+                                </option>
+                                <option {{ old('divisi', @$user->divisi) == 'SUPERVISOR' ? 'selected' : '' }}
+                                    value="SUPERVISOR">Supervisor</option>
+                                <option {{ old('divisi', @$user->divisi) == 'MANAGER' ? 'selected' : '' }} value="MANAGER">
+                                    Manager</option>
+                                <option {{ old('divisi', @$user->divisi) == 'HRGA' ? 'selected' : '' }} value="HRGA">
+                                    HRGA</option>
+                                <option {{ old('divisi', @$user->divisi) == 'DOCUMENT CONTROL' ? 'selected' : '' }}
+                                    value="DOCUMENT CONTROL">
+                                    Document Control</option>
+                                <option {{ old('divisi', @$user->divisi) == 'QC' ? 'selected' : '' }} value="QC">Qc
+                                </option>
+                                <option {{ old('divisi', @$user->divisi) == 'SAFETY' ? 'selected' : '' }} value="SAFETY">
+                                    Safety</option>
+                            </select>
                             @if ($errors->has('divisi'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('divisi') }}

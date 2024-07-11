@@ -25,7 +25,6 @@ class UpdateUserRequest extends FormRequest
             'name'=>'required',
             'divisi'=>'required',
             'username'=>'required',
-            'password'=>'required',
         ];
     }
 
@@ -35,7 +34,6 @@ class UpdateUserRequest extends FormRequest
             'name.required'=>'Nama Harus Diisi',
             'divisi.required'=>'Divisi Harus Diisi',
             'username.required'=>'Username Harus Diisi',
-            'password.required'=>'Password Harus Diisi',
         ];
     }
 }

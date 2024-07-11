@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorelinesRequest;
 use App\Http\Requests\UpdatelinesRequest;
 use App\Models\Areas;
+use App\Models\drawings;
 use App\Models\lines;
 
 class LinesController extends Controller
@@ -28,10 +29,11 @@ class LinesController extends Controller
             'is_update' => false,
         ];
 
-        $line = lines::with('area')->get();
+        $line = lines::with('area','drawing')->get();
         $area = Areas::all();
+        $drawing = drawings::All();
 
-        return view($this->view . 'data', compact('routes', 'line', 'area'));
+        return view($this->view . 'data', compact('routes', 'line', 'area','drawing'));
     }
 
     /**
@@ -66,9 +68,10 @@ class LinesController extends Controller
      */
     public function edit(lines $lines, $id)
     {
-        $lines = lines::with('area')->findOrFail($id); 
+        $lines = lines::with('area','drawing')->findOrFail($id); 
         $line = lines::all();
         $area = Areas::all();
+        $drawing = drawings::All();
 
     $routes = (object) [
         'index' => $this->route,
@@ -76,7 +79,7 @@ class LinesController extends Controller
         'is_update' => true,
     ];
 
-    return view($this->view . 'data', compact('routes', 'lines', 'line', 'area'));
+    return view($this->view . 'data', compact('routes', 'lines', 'line', 'area','drawing'));
     }
 
     /**
@@ -100,5 +103,11 @@ class LinesController extends Controller
         $line->delete();
         $mess = ["type"=>"success","text"=>"Data Berhasil Dihapus"];
         return redirect($this->route)->with($mess);
+    }
+
+    public function getDrawingsByArea($id)
+    {
+        $drawings = drawings::where('id_area', $id)->get();
+        return response()->json($drawings);
     }
 }

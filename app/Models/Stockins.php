@@ -14,6 +14,8 @@ class Stockins extends Model
         'no_trans',
         'tgl_masuk',
         'id_user',
+        'id_enginer',
+        'foto',
     ];
 
     public function details()
@@ -24,5 +26,10 @@ class Stockins extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
+    public function enginer()
+    {
+        return $this->belongsTo(User::class, 'id_enginer');
     }
 }

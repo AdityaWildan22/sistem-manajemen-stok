@@ -36,7 +36,8 @@
                                     </div>
                                     <div>
                                         <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
-                                        <small class="text-muted">{{ Auth::user()->divisi }}</small>
+                                        <small
+                                            class="text-muted">{{ ucwords(strtolower(Auth::user()->divisi)) }}</small>
                                     </div>
                                 </a>
 

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('id_stockin');
             $table->integer('id_barang');
             $table->integer('jumlah');
+            $table->string('satuan',50);
             $table->timestamps();
         });
     }

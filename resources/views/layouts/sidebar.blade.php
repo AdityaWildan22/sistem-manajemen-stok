@@ -9,7 +9,6 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <!-- Dashboard -->
         <li class="menu-item">
             <a href="{{ url('/') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
@@ -20,95 +19,122 @@
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">MASTER DATA</span>
         </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class='menu-icon tf-icons bx bx-buildings'></i>
-                <div data-i18n="Material">Material</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('materials') }}" class="menu-link">
-                        <div data-i18n="Account">Data Material</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ url('materials/create') }}" class="menu-link">
-                        <div data-i18n="Notifications">Tambah Material</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="menu-item">
-            <a href="{{ url('kategoris') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-category"></i>
-                <div data-i18n="Kategori">Kategori</div>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a href="{{ url('subkategoris') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-category-alt"></i>
-                <div data-i18n="Sub Kategori">Sub Kategori</div>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a href="{{ url('areas') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-area"></i>
-                <div data-i18n="Area">Area</div>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a href="{{ url('lines') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-line-chart"></i>
-                <div data-i18n="Line">Line</div>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a href="{{ url('drawings') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                <div data-i18n="Data Laporan">Drawing</div>
-            </a>
-        </li>
-        <!-- Components -->
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">Transaksi</span></li>
-        <!-- User interface -->
-        <li class="menu-item">
-            <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-log-in"></i>
-                <div data-i18n="Stok Masuk">Stok Masuk</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('stockins') }}" class="menu-link">
-                        <div data-i18n="Data Stok Masuk">Data Stok Masuk</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ url('stockins/create') }}" class="menu-link">
-                        <div data-i18n="Input Stok Masuk">Input Stok Masuk</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <!-- Extended components -->
-        <li class="menu-item">
-            <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-log-out"></i>
-                <div data-i18n="Stok Keluar">Stok Keluar</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('stockouts') }}" class="menu-link">
-                        <div data-i18n="Data Stok Keluar">Data Stok Keluar</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ url('stockouts/create') }}" class="menu-link">
-                        <div data-i18n="Input Stok Keluar">Input Stok Keluar</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <!-- Misc -->
+        @if (Auth::user()->divisi !== 'MANAGER' && Auth::user()->divisi !== 'ADMIN')
+            <li class="menu-item">
+                <a href="{{ url('materials') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-buildings"></i>
+                    <div data-i18n="Data Laporan">Material</div>
+                </a>
+            </li>
+        @endif
+        @if (Auth::user()->divisi === 'MANAGER' || Auth::user()->divisi === 'ADMIN')
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class='menu-icon tf-icons bx bx-buildings'></i>
+                    <div data-i18n="Material">Material</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{ url('materials') }}" class="menu-link">
+                            <div data-i18n="Account">Data Material</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ url('materials/create') }}" class="menu-link">
+                            <div data-i18n="Notifications">Tambah Material</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class='menu-icon tf-icons bx bx-category'></i>
+                    <div data-i18n="Kategori">Kategori</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{ url('kategoris') }}" class="menu-link">
+                            <div data-i18n="Account">Data Kategori</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ url('subkategoris') }}" class="menu-link">
+                            <div data-i18n="Notifications">Data Sub Kategori</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="{{ url('areas') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-area"></i>
+                    <div data-i18n="Area">Area</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{{ url('drawings') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                    <div data-i18n="Data Laporan">Drawing</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{{ url('lines') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-line-chart"></i>
+                    <div data-i18n="Line">Line</div>
+                </a>
+            </li>
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Transaksi</span></li>
+            <li class="menu-item">
+                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-log-in"></i>
+                    <div data-i18n="Stok Masuk">Stok Masuk</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{ url('stockins') }}" class="menu-link">
+                            <div data-i18n="Data Stok Masuk">Data Stok Masuk</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ url('stockins/create') }}" class="menu-link">
+                            <div data-i18n="Input Stok Masuk">Input Stok Masuk</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-log-out"></i>
+                    <div data-i18n="Stok Keluar">Stok Keluar</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{ url('stockouts') }}" class="menu-link">
+                            <div data-i18n="Data Stok Keluar">Data Stok Keluar</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ url('stockouts/create') }}" class="menu-link">
+                            <div data-i18n="Input Stok Keluar">Input Stok Keluar</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endif
+        @if (Auth::user()->divisi !== 'MANAGER' && Auth::user()->divisi !== 'ADMIN')
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Transaksi</span></li>
+            <li class="menu-item">
+                <a href="{{ url('stockins') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-log-in"></i>
+                    <div data-i18n="Stok Masuk">Stok Masuk</div>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="{{ url('stockouts') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-log-out"></i>
+                    <div data-i18n="Stok Keluar">Stok Keluar</div>
+                </a>
+            </li>
+        @endif
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Laporan</span></li>
         <li class="menu-item">
             <a href="{{ url('/laporan') }}" class="menu-link">
@@ -116,26 +142,26 @@
                 <div data-i18n="Data Laporan">Data Laporan</div>
             </a>
         </li>
-        <!-- Forms & Tables -->
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">Setting</span></li>
-        <!-- Forms -->
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="User">User</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('users') }}" class="menu-link">
-                        <div data-i18n="Data User">Data User</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ url('users/create') }}" class="menu-link">
-                        <div data-i18n="Tambah User">Tambah User</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
+        @if (Auth::user()->divisi === 'MANAGER' || Auth::user()->divisi === 'SAFETY' || Auth::user()->divisi === 'ADMIN')
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Setting</span></li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-user"></i>
+                    <div data-i18n="User">User</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="{{ url('users') }}" class="menu-link">
+                            <div data-i18n="Data User">Data User</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ url('users/create') }}" class="menu-link">
+                            <div data-i18n="Tambah User">Tambah User</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endif
     </ul>
 </aside>

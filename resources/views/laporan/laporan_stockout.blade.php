@@ -1,131 +1,150 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Data Material</title>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockMat | Data Stok Keluar</title>
     <style>
         body {
             font-family: Arial, sans-serif;
         }
 
         .container {
-            margin: 20px auto;
-            width: 95%;
+            /* max-width: 950px; */
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        h1 {
+        .header h4 {
             text-align: center;
-            margin-bottom: 20px;
+            padding: 10px 0;
+            margin: 0;
         }
 
-        table {
+        .content {
+            /* margin-bottom: 20px; */
+            font-size: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 20px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dtstockout {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            border: 1px solid #000;
         }
 
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
+        .dtstockout th,
+        .dtstockout td {
+            border: 1px solid #000;
+            padding: 5px;
             text-align: left;
-            word-wrap: break-word;
+            font-size: 17px;
         }
 
-        th {
-            background-color: #f4f4f4;
+        .dtstockout th {
+            background-color: #f2f2f2;
             text-align: center;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        .kop-surat img {
+            /* margin-top: 3px; */
+            max-width: 200px;
+            /* margin-bottom: 5px; */
+            float: left;
+            padding: 0;
         }
 
-        tr:hover {
-            background-color: #f1f1f1;
+        .logo {
+            display: block;
+            line-height: 1;
+            text-align: center;
+            /* margin-bottom: 5px; */
         }
 
-        .flex-container {
-            display: flex;
-            flex-direction: column;
+        .logo h3 {
+            max-width: 1050px;
+            padding: 0;
+            margin: 0;
+            font-size: 25px;
         }
 
-        .flex-item {
-            flex: 1;
-            padding: 5px;
+        .logo p {
+            max-width: 1050px;
+            padding: 0;
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .garis-bawah {
+            border-bottom: 2px solid #000;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Data Material</h1>
-        <table id="materialTable" class="display responsive nowrap">
-            <thead>
-                <tr>
-                    <th>No. Transaksi</th>
-                    <th>Tanggal Keluar</th>
-                    <th>Supervisor</th>
-                    <th>Material</th>
-                    <th>Area</th>
-                    <th>Line</th>
-                    <th>Drawing</th>
-                    <th>Jumlah</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($stockouts as $stockout)
-                    @foreach ($stockout->details as $detail)
+        <div class="kop-surat">
+            <div class="logo">
+                <img src="{{ asset('img/backgrounds/kop.png') }}" alt="Logo Perusahaan">
+                <h3>PT. Timas Tarakan</h3>
+                <p>Kec. Tarakan Tengah, Kota Tarakan, Kalimantan Utara
+                    <br>
+                    Telp: 0821 3012 8665
+                </p>
+            </div>
+            <div style="clear: both;"></div>
+            <div class="garis-bawah"></div>
+        </div>
+        <div class="header">
+            <h4>LAPORAN DATA STOK KELUAR</h4>
+        </div>
+        <div class="content">
+            <div class="details">
+                <table class="dtstockout" style="width: 100%; border:1px solid #000">
+                    <thead style="font-weight:100">
                         <tr>
-                            <td>{{ $stockout->no_trans }}</td>
-                            <td>{{ $stockout->tgl_masuk }}</td>
-                            <td>{{ $stockout->user->name }}</td>
-                            <td>{{ $detail->material->nm_brg }}</td>
-                            <td>{{ $detail->area->nm_area }}</td>
-                            <td>{{ $detail->line->no_line }}</td>
-                            <td>{{ $detail->drawing->no_drw }}</td>
-                            <td>{{ $detail->jumlah }}</td>
+                            <th>Nota</th>
+                            <th>Tanggal Keluar</th>
+                            <th>SPV</th>
+                            <th>Nama Barang</th>
+                            <th>Request by Enginer</th>
+                            <th>Line</th>
+                            <th>Satuan</th>
+                            <th>Jumlah</th>
                         </tr>
-                    @endforeach
-                @endforeach
-            </tbody>
-        </table>
-        @if ($stockouts->isEmpty())
-            <h4 style="margin-top: 20px; text-align:center">DATA STOK KELUAR KOSONG</h4>
-        @endif
+                    </thead>
+                    <tbody>
+                        @foreach ($stockouts as $item)
+                            @foreach ($item->details as $detail)
+                                <tr>
+                                    <td>{{ $item->no_trans }}</td>
+                                    <td>{{ Carbon\Carbon::parse($item->tgl_keluar)->format('d-m-Y') }}</td>
+                                    <td>{{ $item->supervisor->name }}</td>
+                                    <td>{{ $detail->material->nm_brg }}</td>
+                                    <td>{{ $item->enginer->name }}</td>
+                                    <td>{{ $detail->line->no_line }}</td>
+                                    <td>{{ $detail->satuan }}</td>
+                                    <td>{{ $detail->jumlah }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
+                @if ($stockouts->isEmpty())
+                    <h6 style="margin-top: 20px; text-align:center">DATA STOK KELUAR KOSONG</h6>
+                @endif
+            </div>
+        </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#materialTable').DataTable({
-                paging: true,
-                searching: true,
-                ordering: true,
-                info: true,
-                autoWidth: false,
-                lengthChange: true,
-                responsive: true,
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            });
-        });
+        window.print();
     </script>
 </body>
 

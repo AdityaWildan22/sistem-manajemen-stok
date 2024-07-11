@@ -27,6 +27,8 @@ class StockinExport implements FromCollection, WithHeadings, WithStyles, ShouldA
                         'tgl_masuk' =>Carbon::parse($stockIn->tgl_masuk)->format('d-m-Y'),
                         'user' => $stockIn->user->name,
                         'nm_brg' => $detail->material->nm_brg,
+                        'enginer' => $stockIn->enginer->name,
+                        'satuan' => $detail->satuan,
                         'jumlah' => $detail->jumlah,
                     ];
                 });
@@ -39,15 +41,17 @@ class StockinExport implements FromCollection, WithHeadings, WithStyles, ShouldA
         return [
             'Nomor Transaksi',
             'Tanggal Masuk',
-            'Supervisor',
+            'PJ',
             'Nama Material',
+            'Request by Enginer',
+            'Satuan',
             'Jumlah',
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:E1')->applyFromArray([
+        $sheet->getStyle('A1:G1')->applyFromArray([
             'font' => [
                 'bold' => true,
             ],

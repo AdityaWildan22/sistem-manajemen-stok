@@ -8,9 +8,10 @@ use App\Http\Requests\UpdateMaterialsRequest;
 use App\Models\Categories;
 use App\Models\Materials;
 use App\Models\Subcategories;
-use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\PDF;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MaterialsController extends Controller
 {
@@ -22,7 +23,7 @@ class MaterialsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth']);
     }
      
     public function index()
@@ -134,9 +135,13 @@ class MaterialsController extends Controller
     public function exportPDF()
     {
         $material = Materials::with('category','subcategories')->get();
-        $pdf = PDF::loadView($this->view.'pdf', compact('material'))->setPaper('a4', 'landscape');
-        // return $pdf->download('Data Material.pdf');
+        $pdf = PDF::loadView($this->view.'pdf', compact('material'))
+        ->setPaper('a4', 'landscape')
+        ->setOption('isRemoteEnabled', true);
+        set_time_limit(50000);
+        $mess = ["type"=>"success","text"=>"Data PDF Berhasil Diunduh"];
+        return $pdf->download('Data Material.pdf');
+        // return $pdf->stream();
         // return view($this->view.'pdf',compact('material'));
-          return $pdf->stream();
     }
 }

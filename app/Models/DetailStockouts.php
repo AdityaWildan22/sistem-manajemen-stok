@@ -17,6 +17,7 @@ class DetailStockouts extends Model
         'id_line',
         'id_drawing',
         'jumlah',
+        'satuan',
     ];
 
     public function stockOut()

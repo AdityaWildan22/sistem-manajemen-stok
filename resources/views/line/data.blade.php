@@ -2,13 +2,6 @@
 @section('judul', 'Data Lines')
 
 @section('content')
-    <script>
-        $(function() {
-            @if (session('type'))
-                showMessage('{{ session('type') }}', '{{ session('text') }}');
-            @endif
-        });
-    </script>
     <div class="row">
         <div class="col-md-4">
             <div class="card">
@@ -37,6 +30,28 @@
                             @if ($errors->has('id_area'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('id_area') }}
+                                </div>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="id_drawing">No. Drawing</label>
+                            <select class="custom-select rounded-0 @error('id_drawing') is-invalid @enderror"
+                                id="id_drawing" name="id_drawing">
+                                <option value="" selected disabled>- Pilih Drawing -</option>
+                                @foreach ($drawing as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ (old('id_drawing') ?? ($routes->is_update ? $lines->id_drawing : '')) == $item->id ? 'selected' : '' }}>
+                                        {{ $item->no_drw }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback" id="id_drawing_error" style="display: none;">
+                                Silakan pilih Nama Area terlebih dahulu.
+                            </div>
+
+                            @if ($errors->has('id_drawing'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('id_drawing') }}
                                 </div>
                             @endif
                         </div>
@@ -73,6 +88,7 @@
                                 <tr>
                                     <th width="10px">NO</th>
                                     <th>Nama Area</th>
+                                    <th>No Drawing</th>
                                     <th>No Line</th>
                                     <th width="21%">Action</th>
                                 </tr>
@@ -82,6 +98,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->area->nm_area }}</td>
+                                        <td>{{ $item->drawing->no_drw }}</td>
                                         <td>{{ $item->no_line }}</td>
                                         <td>
                                             <a href="{{ url($routes->index . $item->id . '/edit') }}"
@@ -104,4 +121,53 @@
             </div>
         </div>
     </div>
+    <script>
+        $(function() {
+            @if (session('type'))
+                showMessage('{{ session('type') }}', '{{ session('text') }}');
+            @endif
+
+            $('#id_drawing').prop('disabled', true);
+
+            $('#id_area').change(function() {
+                var areaId = $(this).val();
+                if (areaId) {
+                    $.ajax({
+                        url: '/get-drawings/' + areaId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#id_drawing').empty();
+                            $('#id_drawing').append(
+                                '<option value="" selected disabled>- Pilih Drawing -</option>'
+                            );
+                            $.each(data, function(key, drawing) {
+                                $('#id_drawing').append('<option value="' + drawing.id +
+                                    '">' + drawing.no_drw + '</option>');
+                            });
+                            $('#id_drawing').prop('disabled', false);
+                            $('#id_drawing_error').hide();
+                        }
+                    });
+                } else {
+                    $('#id_drawing').empty();
+                    $('#id_drawing').append(
+                        '<option value="" selected disabled>- Pilih Drawing -</option>');
+                    $('#id_drawing').prop('disabled',
+                        true);
+                    $('#id_drawing_error').hide();
+                }
+            });
+
+            $('#id_drawing').focus(function() {
+                if ($('#id_area').val() === '') {
+                    $('#id_drawing_error').show();
+                    $('#id_area').focus();
+                    $('#id_drawing').prop('disabled', true);
+                } else {
+                    $('#id_drawing_error').hide();
+                }
+            });
+        });
+    </script>
 @endsection

@@ -13,9 +13,19 @@
                 <td>{{ Carbon\Carbon::parse($stockout->tgl_keluar)->format('d-m-Y') }}</td>
             </tr>
             <tr>
-                <td>Supervisor</td>
+                <td>Staff</td>
                 <td>:</td>
                 <td>{{ $stockout->user->name }}</td>
+            </tr>
+            <tr>
+                <td>Supervisor</td>
+                <td>:</td>
+                <td>{{ $stockout->supervisor->name }}</td>
+            </tr>
+            <tr>
+                <td>Request by Enginer</td>
+                <td>:</td>
+                <td>{{ $stockout->enginer->name }}</td>
             </tr>
         </table>
     </div>

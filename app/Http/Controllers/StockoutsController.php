@@ -11,7 +11,10 @@ use App\Models\drawings;
 use App\Models\lines;
 use App\Models\Materials;
 use App\Models\Stockouts;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\PDF;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StockoutsController extends Controller
@@ -34,7 +37,7 @@ class StockoutsController extends Controller
             'add' => $this->route . 'create',
         ];
 
-        $stockout = Stockouts::with('details', 'user')->get();
+        $stockout = Stockouts::with('details', 'user','supervisor','enginer')->get();
         return view($this->view.'data',compact('routes','stockout'));
 
     }
@@ -44,18 +47,21 @@ class StockoutsController extends Controller
      */
     public function create()
     {
-        $routes =(object)[
-            'index'=> $this->route,
+        $routes = (object)[
+            'index' => $this->route,
             'save' => $this->route,
-            'is_update'=>false,
+            'is_update' => false,
         ];
-
-        $materials = Materials::All();
-        $areas = Areas::All();
-        $drawings = drawings::All();
-        $lines = lines::All();
-
-        return view($this->view.'form',compact('routes','materials','areas','drawings','lines'));
+    
+        $materials = Materials::all();
+        $areas = Areas::all();
+        $drawings = Drawings::all();
+        $lines = Lines::all();
+    
+        $supervisor = User::where('divisi', 'SUPERVISOR')->get();
+        $enginer = User::where('divisi', 'ENGINER')->get();
+    
+        return view($this->view . 'form', compact('routes', 'materials', 'areas', 'drawings', 'lines', 'supervisor','enginer'));
     }
 
     /**
@@ -63,14 +69,24 @@ class StockoutsController extends Controller
      */
     public function store(StoreStockoutsRequest $request)
     {
-        // Simpan data stok masuk
+
+        $filePath = null;
+        
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $path = $file->store('public/nota_keluar');
+            $filePath = Storage::url($path);
+        }
+
     $stockout = Stockouts::create([
         'no_trans' => $request->no_trans,
         'tgl_keluar' => $request->tgl_keluar,
-        'id_user' => 1, // Sesuaikan dengan id_user yang sesuai
+        'id_user' => Auth::user()->id,
+        'id_supervisor' => $request->id_supervisor,
+        'id_enginer' => $request->id_enginer,
+        'foto' => $filePath,
     ]);
 
-    // Simpan detail stok masuk dan update stok material
     foreach ($request->details as $detail) {
         // dd($detail);
         DetailStockouts::create([
@@ -80,9 +96,9 @@ class StockoutsController extends Controller
             'id_line' => $detail['id_line'],
             'id_drawing' => $detail['id_drawing'],
             'jumlah' => $detail['jumlah'],
+            'satuan' => $detail['satuan']
         ]);
 
-        // Update stok di tabel material
         $material = Materials::find($detail['id_barang']);
         if ($material) {
             $material->decrement('stok', $detail['jumlah']);
@@ -98,7 +114,7 @@ class StockoutsController extends Controller
      */
     public function show(Stockouts $stockouts, $id)
     {
-        $stockout = Stockouts::with('details.material','user')->findOrFail($id);
+        $stockout = Stockouts::with('details.material','user','supervisor')->findOrFail($id);
         return view($this->view . 'show', compact('stockout'));
     }
 
@@ -112,12 +128,14 @@ class StockoutsController extends Controller
         $areas = Areas::All();
         $drawings = drawings::All();
         $lines = lines::All();
+        $supervisor = User::where('divisi', 'SUPERVISOR')->get();
+        $enginer = User::where('divisi','ENGINER')->get();
         $routes =(object)[
             'index'=> $this->route,
             'save' => $this->route,
             'is_update'=>true,
         ];
-        return view($this->view.'form', compact('stockout', 'materials','routes','areas','drawings','lines'));
+        return view($this->view.'form', compact('stockout', 'materials','routes','areas','drawings','lines','supervisor','enginer'));
     }
 
     /**
@@ -127,8 +145,22 @@ class StockoutsController extends Controller
 {
     $stockout = Stockouts::findOrFail($id);
 
+    if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $path = $file->store('public/nota_keluar');
+        $filePath = Storage::url($path);
+    
+        if ($stockout->foto) {
+            Storage::delete($stockout->foto);
+        }
+
+        $stockout->foto = $filePath;
+    }
+
     $stockout->no_trans = $request->no_trans;
     $stockout->tgl_keluar = $request->tgl_keluar;
+    $stockout->id_supervisor = $request->id_supervisor;
+    $stockout->id_enginer = $request->id_enginer;
     $stockout->save();
 
     $selisihJumlah = [];
@@ -143,6 +175,7 @@ class StockoutsController extends Controller
                 'id_line' => $detail['id_line'],
                 'id_drawing' => $detail['id_drawing'],
                 'jumlah' => $detail['jumlah'],
+                'satuan' => $detail['satuan']
             ]);
 
             $material = Materials::findOrFail($detail['id_barang']);
@@ -233,8 +266,20 @@ class StockoutsController extends Controller
     {
         $stockout = Stockouts::with('user','details.material', 'details.area', 'details.line', 'details.drawing')->get();
         $pdf = PDF::loadView($this->view.'pdf', compact('stockout'))->setPaper('a4', 'landscape');
-        // return $pdf->download('Data Material.pdf');
+        return $pdf->download('Data Stok Keluar.pdf');
         // return view($this->view.'pdf',compact('material'));
           return $pdf->stream();
+    }
+
+    public function getDrawings($areaId)
+    {
+        $drawings = drawings::where('id_area', $areaId)->get();
+        return response()->json($drawings);
+    }
+
+    public function getLines($drawingId)
+    {
+        $lines = lines::where('id_drawing', $drawingId)->get();
+        return response()->json($lines);
     }
 }

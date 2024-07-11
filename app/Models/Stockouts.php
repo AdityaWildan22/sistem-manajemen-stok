@@ -14,6 +14,9 @@ class Stockouts extends Model
         'no_trans',
         'tgl_keluar',
         'id_user',
+        'id_supervisor',
+        'id_enginer',
+        'foto',
     ];
 
     public function details()
@@ -24,5 +27,15 @@ class Stockouts extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
+    public function supervisor()
+    {
+        return $this->belongsTo(User::class, 'id_supervisor');
+    }
+
+    public function enginer()
+    {
+        return $this->belongsTo(User::class, 'id_enginer');
     }
 }
