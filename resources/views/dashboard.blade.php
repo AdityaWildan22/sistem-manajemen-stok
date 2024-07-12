@@ -172,7 +172,7 @@
                         <th>No Transaksi</th>
                         <th>Tanggal Masuk</th>
                         <th>Staff</th>
-                        <th>Aksi</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -206,7 +206,7 @@
                         <th>Tanggal Keluar</th>
                         <th>Staff</th>
                         <th>Supervisor</th>
-                        <th>Aksi</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>

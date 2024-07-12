@@ -25,11 +25,12 @@ class ReportController extends Controller
     }
 
     public function rpt_material(){
-
-        $materials = Materials::with('category','subcategories')->get();
-        return view($this->view.'laporan_material',compact('materials'));
-        
+        $materials = Materials::whereHas('stockInDetails', function($query) {
+            $query->whereHas('stockIn');
+        })->with('category', 'subcategories')->get();
+        return view($this->view.'laporan_material', compact('materials'));
     }
+    
 
     public function rpt_stockin(){
         $stockins = Stockins::with('user','details.material')->get();

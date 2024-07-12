@@ -42,7 +42,7 @@
                             <th>Satuan</th>
                             <th>Stok</th>
                             @if (Auth::user()->divisi === 'MANAGER' || Auth::user()->divisi === 'ADMIN')
-                                <th width="18%">Action</th>
+                                <th width="15%">Action</th>
                             @endif
                             @if (Auth::user()->divisi !== 'MANAGER' && Auth::user()->divisi !== 'ADMIN')
                                 <th width="10%">Action</th>

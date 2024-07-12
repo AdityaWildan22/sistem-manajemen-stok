@@ -41,7 +41,7 @@
                             <th width="20%">Action</th>
                         @endif
                         @if (Auth::user()->divisi !== 'MANAGER' || Auth::user()->divisi !== 'ADMIN')
-                            <th width="15%">Action</th>
+                            <th width="10%">Action</th>
                         @endif
                     </tr>
                 </thead>
@@ -56,7 +56,7 @@
                                 <a href="{{ url($routes->index . $item->id) }}" class="btn btn-success btn-sm"
                                     data-toggle="tooltip" data-placement="top" title="Lihat Data"><i
                                         class="fas fa-eye"></i></a>
-                                @if (Auth::user()->divisi !== 'MANAGER' || Auth::user()->divisi !== 'ADMIN')
+                                @if (Auth::user()->divisi === 'MANAGER' || Auth::user()->divisi === 'ADMIN')
                                     <a href="{{ url($routes->index . $item->id . '/edit') }}"
                                         class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top"
                                         title="Edit"><i class="fas fa-pen"></i></a>
