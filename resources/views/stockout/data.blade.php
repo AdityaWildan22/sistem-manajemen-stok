@@ -38,10 +38,10 @@
                         <th>Tanggal Keluar</th>
                         <th>Staff</th>
                         <th>Supervisor</th>
-                        @if (Auth::user()->divisi === 'MANAGER' && Auth::user()->divisi === 'ADMIN')
-                            <th width="20%">Action</th>
+                        @if (Auth::user()->divisi === 'MANAGER' || Auth::user()->divisi === 'ADMIN')
+                            <th width="15%">Action</th>
                         @endif
-                        @if (Auth::user()->divisi !== 'MANAGER' || Auth::user()->divisi === 'ADMIN')
+                        @if (Auth::user()->divisi !== 'MANAGER' && Auth::user()->divisi !== 'ADMIN')
                             <th width="10%">Action</th>
                         @endif
                     </tr>

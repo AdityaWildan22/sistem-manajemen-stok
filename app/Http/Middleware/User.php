@@ -16,14 +16,11 @@ class User
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Jika pengguna adalah Supervisor, izinkan semua akses
         if (Auth::user()->divisi === 'MANAGER' ||  Auth::user()->divisi === 'ADMIN') {
             return $next($request);
         }
     
-        // Jika pengguna adalah Safety, izinkan akses CRUD untuk data pengguna
         if (Auth::user()->divisi === 'SAFETY') {
-            // Akses yang diizinkan untuk divisi SAFETY
             $allowedRoutes = [
                 'users.index',
                 'users.show',
@@ -39,7 +36,6 @@ class User
             }
         }
     
-        // Jika pengguna bukan Supervisor atau Safety dan mencoba mengakses selain index atau show, redirect dengan pesan error
         $allowedRoutes = [
             'materials.index',
             'materials.show',
@@ -47,8 +43,6 @@ class User
             'stockins.show',
             'stockouts.index',
             'stockouts.show',
-            'users.index',
-            'users.show'
         ];
     
         if (!in_array($request->route()->getName(), $allowedRoutes)) {
